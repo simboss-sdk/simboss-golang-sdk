@@ -3,7 +3,7 @@ package simboss
 import "encoding/json"
 
 type UserService struct {
-	Client *Client
+	client *Client
 }
 
 type CardSummary struct {
@@ -25,7 +25,7 @@ type Dashboard struct {
 // 账户总览接口
 func (u * UserService) DashboardGet() (*Dashboard, error) {
 	dashboard := &Dashboard{}
-	body, err := u.Client.Post("/user/dashboard/get", nil)
+	body, err := u.client.Post("/user/dashboard/get", nil)
 	if err != nil {
 		return nil, err
 	}

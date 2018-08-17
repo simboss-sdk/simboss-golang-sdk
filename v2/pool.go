@@ -6,7 +6,7 @@ import (
 )
 
 type PoolService struct {
-	Client *Client
+	client *Client
 }
 
 type Pool struct {
@@ -30,7 +30,7 @@ type Pool struct {
 // 流量池详情
 func (p * PoolService) Detail(params url.Values) (*Pool, error) {
 	poolDetail := &Pool{}
-	body, err := p.Client.Post("/card/pool/detail", params)
+	body, err := p.client.Post("/card/pool/detail", params)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (p * PoolService) Detail(params url.Values) (*Pool, error) {
 //用户下所有流量池信息
 func (p * PoolService) List() ([]Pool, error) {
 	poolDetailList := make([]Pool, 0)
-	body, err := p.Client.Post("/card/pool/list", nil)
+	body, err := p.client.Post("/card/pool/list", nil)
 	if err != nil {
 		return nil, err
 	}

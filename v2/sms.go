@@ -7,12 +7,12 @@ import (
 	)
 
 type SmsService struct {
-	Client *Client
+	client *Client
 }
 
 // 短信下发接口
 func (s *SmsService) Send(params url.Values) error {
-	_, err := s.Client.Post("/sms/send", params)
+	_, err := s.client.Post("/sms/send", params)
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (s *SmsService) List(params url.Values) (*SmsList, error) {
 		Page: Page{},
 		List: make([]Sms, 0),
 	}
-	body, err := s.Client.Post("/sms/list", params)
+	body, err := s.client.Post("/sms/list", params)
 	if err != nil {
 		return nil, err
 	}

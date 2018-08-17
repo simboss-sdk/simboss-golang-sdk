@@ -24,9 +24,7 @@ func TestClient_sign(t *testing.T) {
 func TestResponse_Unmarshal(t *testing.T) {
 	resp := Response{
 		Code:    "0",
-		Message: "",
 		Data:    Pool{Id: 1001},
-		Detail:  "",
 	}
 
 	respBytes, err := json.Marshal(resp)

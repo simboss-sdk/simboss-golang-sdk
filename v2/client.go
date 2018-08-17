@@ -19,6 +19,7 @@ const API_ROOT string = "https://api.simboss.com/2.0"
 type Client struct {
 	appId     string
 	appSecret string
+	httpDo func(*http.Client, *http.Request) (*http.Response, error)
 	User      UserService
 	Device    DeviceService
 	Pool      PoolService
@@ -27,9 +28,17 @@ type Client struct {
 }
 
 func NewClient(appId, appSecret string) *Client {
+	httpDo := func(c *http.Client, req *http.Request) (*http.Response, error) {
+		return c.Do(req)
+	}
+	return NewClientWithHttpDo(appId, appSecret, httpDo)
+}
+
+func NewClientWithHttpDo(appId, appSecret string, httpDo func(*http.Client, *http.Request) (*http.Response, error)) *Client {
 	c :=  &Client{
 		appId:     appId,
 		appSecret: appSecret,
+		httpDo: httpDo,
 	}
 	c.User = UserService{c}
 	c.Device = DeviceService{c}
@@ -75,8 +84,7 @@ func (c *Client) Post(path string, data url.Values) ([]byte, error) {
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8;")
 
-	httpClient := &http.Client{}
-	res, err := httpClient.Do(req)
+	res, err := c.httpDo(http.DefaultClient, req)
 	if err != nil {
 		return nil, err
 	}

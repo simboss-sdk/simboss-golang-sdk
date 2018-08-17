@@ -3,11 +3,11 @@ package simboss
 import "net/url"
 
 type RealnameService struct {
-	Client *Client
+	client *Client
 }
 
 func (r *RealnameService) Submit(params url.Values) error {
-	_, err := r.Client.Post("/realname/submitRealname", params)
+	_, err := r.client.Post("/realname/submitRealname", params)
 	if err != nil {
 		return err
 	}
