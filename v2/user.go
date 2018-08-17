@@ -22,18 +22,15 @@ type Dashboard struct {
 	CardSummary string `json:"cardSummary"`
 }
 
-
-/*
- * 账户总览接口
- */
-func (u * UserService) DashboardGet() (Dashboard, error) {
-	dashboard := Dashboard{}
+// 账户总览接口
+func (u * UserService) DashboardGet() (*Dashboard, error) {
+	dashboard := &Dashboard{}
 	body, err := u.Client.Post("/user/dashboard/get", nil)
 	if err != nil {
-		return dashboard, err
+		return nil, err
 	}
-	if err := json.Unmarshal(body, &dashboard); err != nil {
-		return dashboard, err
+	if err := json.Unmarshal(body, dashboard); err != nil {
+		return nil, err
 	}
 	return dashboard, nil
 }

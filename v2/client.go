@@ -1,7 +1,7 @@
 package simboss
 
 import (
-		"time"
+	"time"
 	"strconv"
 	"net/http"
 	"fmt"
@@ -10,6 +10,8 @@ import (
 	"strings"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
+	"net/url"
 )
 
 const API_ROOT string = "https://api.simboss.com/2.0"
@@ -37,11 +39,11 @@ func NewClient(appId, appSecret string) *Client {
 	return c
 }
 
-func (c *Client) sign(data map[string]string) string {
+func (c *Client) sign(data url.Values) string {
 	params := make([]string, 0)
 
 	for key, value := range data {
-		params = append(params, fmt.Sprintf("%s=%s", key, value))
+		params = append(params, fmt.Sprintf("%s=%s", key, strings.Join(value, ",")))
 	}
 
 	sort.Strings(params)
@@ -55,18 +57,18 @@ func (c *Client) sign(data map[string]string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func (c *Client) Post(url string, data map[string]string) ([]byte, error) {
-	url = API_ROOT + url
+func (c *Client) Post(path string, data url.Values) ([]byte, error) {
+	path = API_ROOT + path
 
 	if data == nil {
-		data = make(map[string]string)
+		data = make(url.Values)
 	}
 
-	data["appid"] = c.appId
-	data["timestamp"] = strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
-	data["sign"] = c.sign(data)
+	data.Set("appid", c.appId)
+	data.Set("timestamp", strconv.FormatInt(time.Now().UnixNano()/1e6, 10))
+	data.Set("sign", c.sign(data))
 
-	req, err := http.NewRequest("POST", url, nil)
+	req, err := http.NewRequest("POST", path, strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, err
 	}
@@ -85,5 +87,37 @@ func (c *Client) Post(url string, data map[string]string) ([]byte, error) {
 		return nil, err
 	}
 
-	return body, nil
+	businessResponse := Response{}
+
+	if err := json.Unmarshal(body, &businessResponse); err != nil {
+		return nil, err
+	}
+
+	if businessResponse.Code != "0" {
+		return nil, ResponseError{businessResponse.Code, businessResponse.Message, businessResponse.Detail}
+	}
+
+	dataBytes, err := json.Marshal(businessResponse.Data)
+	if err != nil {
+		return nil, err
+	}
+
+	return dataBytes, nil
+}
+
+type Response struct {
+	Code string `json:"code"`
+	Data interface{} `json:"data"`
+	Message string `json:"string"`
+	Detail string `json:"detail"`
+}
+
+type ResponseError struct {
+	Code string
+	Message string
+	Detail string
+}
+
+func (b ResponseError) Error() string {
+	return fmt.Sprintf("Code: %s Message: %s Detail: %s", b.Code, b.Message, b.Detail)
 }
