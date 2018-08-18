@@ -16,10 +16,10 @@ type Dashboard struct {
 	UserAccount string `json:"userAccount"`
 	Company string `json:"company"`
 	Name string `json:"name"`
-	Balance string `json:"balance"`
+	Balance float64 `json:"balance"`
 	Mobile string `json:"mobile"`
 	RegisterTime string `json:"registerTime"`
-	CardSummary string `json:"cardSummary"`
+	CardSummary CardSummary `json:"cardSummary"`
 }
 
 // 账户总览接口

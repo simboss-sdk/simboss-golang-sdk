@@ -1,6 +1,10 @@
 package utils
 
-import "net/url"
+import (
+	"net/url"
+	"time"
+	"strconv"
+)
 
 func Required(params url.Values, names ...string) bool {
 	var flag = true
@@ -12,4 +16,8 @@ func Required(params url.Values, names ...string) bool {
 		}
 	}
 	return flag
+}
+
+func GetNonce() string {
+	return strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
 }

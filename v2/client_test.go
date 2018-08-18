@@ -2,11 +2,10 @@ package simboss
 
 import (
 	"testing"
-	"strconv"
-	"time"
-	"net/url"
+			"net/url"
 	"encoding/json"
-)
+	"github.com/simboss-sdk/simboss-golang-sdk/utils"
+			)
 
 func TestClient_sign(t *testing.T) {
 	const appId string = "1111"
@@ -16,7 +15,7 @@ func TestClient_sign(t *testing.T) {
 	data.Set("iccid", "1001")
 	data.Set("type", "cmcc")
 	data.Set("appid", appId)
-	data.Set("timestamp", strconv.FormatInt(time.Now().UnixNano()/1e6, 10))
+	data.Set("timestamp", utils.GetNonce())
 	sign := client.sign(data)
 	t.Log(sign)
 }

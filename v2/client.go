@@ -1,9 +1,7 @@
 package simboss
 
 import (
-	"time"
-	"strconv"
-	"net/http"
+			"net/http"
 	"fmt"
 	"io/ioutil"
 	"sort"
@@ -12,6 +10,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/url"
+	"github.com/simboss-sdk/simboss-golang-sdk/utils"
 )
 
 const API_ROOT string = "https://api.simboss.com/2.0"
@@ -74,7 +73,7 @@ func (c *Client) Post(path string, data url.Values) ([]byte, error) {
 	}
 
 	data.Set("appid", c.appId)
-	data.Set("timestamp", strconv.FormatInt(time.Now().UnixNano()/1e6, 10))
+	data.Set("timestamp", utils.GetNonce())
 	data.Set("sign", c.sign(data))
 
 	req, err := http.NewRequest("POST", path, strings.NewReader(data.Encode()))
@@ -90,7 +89,7 @@ func (c *Client) Post(path string, data url.Values) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(req.Body)
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +97,7 @@ func (c *Client) Post(path string, data url.Values) ([]byte, error) {
 	businessResponse := Response{}
 
 	if err := json.Unmarshal(body, &businessResponse); err != nil {
+		fmt.Println(body)
 		return nil, err
 	}
 
@@ -116,8 +116,9 @@ func (c *Client) Post(path string, data url.Values) ([]byte, error) {
 type Response struct {
 	Code string `json:"code"`
 	Data interface{} `json:"data"`
-	Message string `json:"string"`
+	Message string `json:"message"`
 	Detail string `json:"detail"`
+	Success bool `json:"success"`
 }
 
 type ResponseError struct {
