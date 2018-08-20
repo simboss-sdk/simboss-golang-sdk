@@ -2,7 +2,7 @@ package simboss
 
 import (
 	"net/url"
-	"time"
+	"github.com/simboss-sdk/simboss-golang-sdk/utils/time"
 	"encoding/json"
 	)
 
