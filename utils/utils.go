@@ -18,6 +18,18 @@ func Required(params url.Values, names ...string) bool {
 	return flag
 }
 
+func RequiredAtLeastOne(params url.Values, names ...string) bool {
+	var flag = false
+	for _, name := range names {
+		value := params.Get(name)
+		if value != "" {
+			flag = true
+			break
+		}
+	}
+	return flag
+}
+
 func GetNonce() string {
 	return strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
 }

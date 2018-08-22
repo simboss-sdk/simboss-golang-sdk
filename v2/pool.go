@@ -29,6 +29,9 @@ type Pool struct {
 
 // 流量池详情
 func (p * PoolService) Detail(params url.Values) (*Pool, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	poolDetail := &Pool{}
 	body, err := p.client.Post("/card/pool/detail", params)
 	if err != nil {

@@ -4,7 +4,8 @@ import (
 	"net/url"
 	"github.com/simboss-sdk/simboss-golang-sdk/utils/time"
 	"encoding/json"
-	)
+	"github.com/simboss-sdk/simboss-golang-sdk/utils"
+)
 
 type SmsService struct {
 	client *Client
@@ -12,6 +13,12 @@ type SmsService struct {
 
 // 短信下发接口
 func (s *SmsService) Send(params url.Values) error {
+	if err := RequiredCardId(params); err != nil {
+		return err
+	}
+	if !utils.Required(params,"text") {
+		return ErrRequired
+	}
 	_, err := s.client.Post("/sms/send", params)
 	if err != nil {
 		return err
@@ -41,6 +48,12 @@ type SmsList struct {
 
 // 短信查询
 func (s *SmsService) List(params url.Values) (*SmsList, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
+	if !utils.Required(params,"pageNo") {
+		return nil, ErrRequired
+	}
 	smsList := &SmsList{
 		Page: Page{},
 		List: make([]Sms, 0),

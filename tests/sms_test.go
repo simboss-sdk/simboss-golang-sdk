@@ -29,6 +29,7 @@ func TestSms_Send(t *testing.T) {
 
 	params := url.Values{}
 	params.Set("iccid", "1001")
+	params.Set("text", "sms content")
 
 	err := client.Sms.Send(params)
 	if err != nil {
@@ -73,6 +74,7 @@ func TestSms_List(t *testing.T) {
 
 	params := url.Values{}
 	params.Set("iccid", "1001")
+	params.Set("pageNo", "1")
 
 	list, err := client.Sms.List(params)
 	if err != nil {

@@ -11,9 +11,28 @@ import (
 	"encoding/json"
 	"net/url"
 	"github.com/simboss-sdk/simboss-golang-sdk/utils"
+	"errors"
 )
 
 const API_ROOT string = "https://api.simboss.com/2.0"
+
+var ErrRequired = errors.New("缺少必填参数")
+var ErrRequiredCardId = errors.New("iccid, imsi, msisdn 三者选一")
+var ErrRequiredBatchCardId = errors.New("iccids, imsis, msisdns 三者选一")
+
+func RequiredCardId(values url.Values) error {
+	if !utils.RequiredAtLeastOne(values, "iccid", "imsi", "msisdn") {
+		return ErrRequiredCardId
+	}
+	return nil
+}
+
+func RequiredBatchCardId(values url.Values) error {
+	if !utils.RequiredAtLeastOne(values, "iccids", "imsis", "msisdns") {
+		return ErrRequiredBatchCardId
+	}
+	return nil
+}
 
 type Client struct {
 	appId     string

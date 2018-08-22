@@ -4,6 +4,7 @@ import (
 	"net/url"
 	"time"
 	"encoding/json"
+	"github.com/simboss-sdk/simboss-golang-sdk/utils"
 )
 
 type DeviceService struct {
@@ -42,6 +43,9 @@ type Device struct {
 
 // 批量卡详情
 func (d * DeviceService) DetailBatch(params url.Values) ([]Device, error) {
+	if err := RequiredBatchCardId(params); err != nil {
+		return nil, err
+	}
 	deviceList := make([]Device, 0)
 	body, err := d.client.Post("/device/detail/batch", params)
 	if err != nil {
@@ -55,6 +59,9 @@ func (d * DeviceService) DetailBatch(params url.Values) ([]Device, error) {
 
 // 单卡详情
 func (d *DeviceService) Detail(params url.Values) (*Device, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	device := &Device{}
 	body, err := d.client.Post("/device/detail", params)
 	if err != nil {
@@ -83,6 +90,9 @@ type OrderedPlan struct {
 
 // 单卡已订购套餐列表
 func (d *DeviceService) OrderedPlans(params url.Values) ([]OrderedPlan, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	orderedPlanList := make([]OrderedPlan, 0)
 	body, err := d.client.Post("/device/orderedPlans", params)
 	if err != nil {
@@ -108,6 +118,9 @@ type RatePlan struct {
 
 // 单卡可续费套餐信息
 func (d *DeviceService) Rateplans(params url.Values) ([]RatePlan, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	ratePlanList := make([]RatePlan, 0)
 	body, err := d.client.Post("/device/rateplans", params)
 	if err != nil {
@@ -121,6 +134,9 @@ func (d *DeviceService) Rateplans(params url.Values) ([]RatePlan, error) {
 
 // 单卡续费
 func (d *DeviceService) Recharge(params url.Values) (string, error) {
+	if err := RequiredCardId(params); err != nil {
+		return "", err
+	}
 	cashFlowUuid := ""
 	body, err := d.client.Post("/device/recharge", params)
 	if err != nil {
@@ -149,6 +165,9 @@ type RechargeRecord struct {
 
 // 单卡续费记录
 func (d *DeviceService) RechargeRecords(params url.Values) ([]RechargeRecord, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	rechargeRecordList := make([]RechargeRecord, 0)
 	body, err := d.client.Post("/device/recharge/records", params)
 	if err != nil {
@@ -169,6 +188,9 @@ type GprsStatus struct {
 
 // 实时连接状态查询
 func (d *DeviceService) GprsStatus(params url.Values) (*GprsStatus, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	gprsStatus := &GprsStatus{}
 	body, err := d.client.Post("/device/gprsStatus", params)
 	if err != nil {
@@ -187,6 +209,9 @@ type UserStatus struct {
 
 // 实时用户状态查询
 func (d *DeviceService) UserStatus(params url.Values) (*UserStatus, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	userStatus := &UserStatus{}
 	body, err := d.client.Post("/device/userStatus", params)
 	if err != nil {
@@ -205,6 +230,9 @@ type RunningStatus struct {
 
 // 设备实时开关机状态查询
 func (d *DeviceService) RunningStatus(params url.Values) (*RunningStatus, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	runningStatus := &RunningStatus{}
 	body, err := d.client.Post("/device/runningStatus", params)
 	if err != nil {
@@ -224,6 +252,9 @@ type RatePlanSummary struct {
 
 // 查询设备套餐概要
 func (d *DeviceService) RatePlanSummary(params url.Values) (*RatePlanSummary, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
 	ratePlanSummary := &RatePlanSummary{}
 	body, err := d.client.Post("/device/ratePlan/summary", params)
 	if err != nil {
@@ -237,6 +268,12 @@ func (d *DeviceService) RatePlanSummary(params url.Values) (*RatePlanSummary, er
 
 // 流量池卡开关网络
 func (d *DeviceService) ModifyDeviceStatus(params url.Values) (error) {
+	if err := RequiredCardId(params); err != nil {
+		return err
+	}
+	if !utils.Required(params, "status") {
+		return ErrRequired
+	}
 	_, err := d.client.Post("/device/modifyDeviceStatus", params)
 	if err != nil {
 		return err
@@ -251,6 +288,12 @@ type DailyUsage struct {
 
 // 日用量查询
 func (d *DeviceService) DailyUsage(params url.Values) (*DailyUsage, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
+	if !utils.Required(params, "date") {
+		return nil, ErrRequired
+	}
 	dailyUsage := &DailyUsage{}
 	body, err := d.client.Post("/device/dailyUsage", params)
 	if err != nil {
@@ -264,6 +307,12 @@ func (d *DeviceService) DailyUsage(params url.Values) (*DailyUsage, error) {
 
 // 日用量按照时间范围查询
 func (d *DeviceService) DailyUsageByDateRange(params url.Values) ([]DailyUsage, error) {
+	if err := RequiredCardId(params); err != nil {
+		return nil, err
+	}
+	if !utils.Required(params, "startDate", "endDate") {
+		return nil, ErrRequired
+	}
 	dailyUsageList := make([]DailyUsage, 0)
 	body, err := d.client.Post("/device/dailyUsageByDateRange", params)
 	if err != nil {
@@ -277,6 +326,9 @@ func (d *DeviceService) DailyUsageByDateRange(params url.Values) ([]DailyUsage, 
 
 // 取消测试期
 func (d *DeviceService) CancelTesting(params url.Values) (error) {
+	if err := RequiredCardId(params); err != nil {
+		return err
+	}
 	_, err := d.client.Post("/device/cancelTesting", params)
 	if err != nil {
 		return err
@@ -286,6 +338,12 @@ func (d *DeviceService) CancelTesting(params url.Values) (error) {
 
 // 更新备注
 func (d *DeviceService) MemoUpdate(params url.Values) (error) {
+	if err := RequiredCardId(params); err != nil {
+		return err
+	}
+	if !utils.Required(params, "memo") {
+		return ErrRequired
+	}
 	_, err := d.client.Post("/device/memo/update", params)
 	if err != nil {
 		return err
@@ -295,6 +353,12 @@ func (d *DeviceService) MemoUpdate(params url.Values) (error) {
 
 // 批量更新备注
 func (d *DeviceService) MemoBatchUpdate(params url.Values) (error) {
+	if err := RequiredBatchCardId(params); err != nil {
+		return err
+	}
+	if !utils.Required(params, "memo") {
+		return ErrRequired
+	}
 	_, err := d.client.Post("/device/memo/batchUpdate", params)
 	if err != nil {
 		return err
