@@ -5,11 +5,11 @@ import (
 			"net/url"
 	"encoding/json"
 	"github.com/simboss-sdk/simboss-golang-sdk/utils"
-			)
+)
 
 func TestClient_sign(t *testing.T) {
-	const appId string = "1111"
-	const  appSecret = "2222"
+	const appId string = "1001"
+	const  appSecret = "xxxx"
 	client := NewClient(appId, appSecret)
 	data := url.Values{}
 	data.Set("iccid", "1001")

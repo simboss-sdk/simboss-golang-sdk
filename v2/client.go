@@ -75,8 +75,7 @@ func (c *Client) sign(data url.Values) string {
 
 	sort.Strings(params)
 
-	params = append(params, c.appSecret)
-	paramsString := strings.Join(params, "&")
+	paramsString := strings.Join(params, "&") + c.appSecret
 
 	h := sha256.New()
 	h.Write([]byte(paramsString))
