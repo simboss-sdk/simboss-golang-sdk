@@ -30,7 +30,7 @@ func TestUser_DashboardGet(t *testing.T) {
 	}
 }
 
-func TestUser_DashboardGet_Business_Error(t *testing.T) {
+func TestUser_DashboardGet_Response_Error(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
 {

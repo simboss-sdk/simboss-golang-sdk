@@ -28,10 +28,15 @@ func TestSms_Send(t *testing.T) {
 	client := simboss.NewClientWithHttpDo(appId, appSecret, httpDo)
 
 	params := url.Values{}
+	err := client.Sms.Send(params)
+	if err != simboss.ErrRequiredCardId {
+		t.Fatal("should be ErrRequiredCardId")
+	}
+
 	params.Set("iccid", "1001")
 	params.Set("text", "sms content")
 
-	err := client.Sms.Send(params)
+	err = client.Sms.Send(params)
 	if err != nil {
 		t.Fatal(err)
 	}

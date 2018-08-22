@@ -2,7 +2,7 @@ package simboss
 
 import (
 	"net/url"
-	"time"
+	"github.com/simboss-sdk/simboss-golang-sdk/utils/time"
 	"encoding/json"
 	"github.com/simboss-sdk/simboss-golang-sdk/utils"
 )
@@ -142,7 +142,7 @@ func (d *DeviceService) Recharge(params url.Values) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if err := json.Unmarshal(body, cashFlowUuid); err != nil {
+	if err := json.Unmarshal(body, &cashFlowUuid); err != nil {
 		return "", err
 	}
 	return cashFlowUuid, nil
@@ -247,7 +247,7 @@ func (d *DeviceService) RunningStatus(params url.Values) (*RunningStatus, error)
 type RatePlanSummary struct {
 	Iccid string `json:"iccid"`
 	VolumeSummary float64 `json:"volumeSummary"`
-	ExpirationDate string `json:"expirationDate"`
+	ExpirationDate time.Time `json:"expirationDate"`
 }
 
 // 查询设备套餐概要
@@ -282,8 +282,8 @@ func (d *DeviceService) ModifyDeviceStatus(params url.Values) (error) {
 }
 
 type DailyUsage struct {
-	Usage string `json:"usage"`
-	Date time.Time `json:"date"`
+	Usage float64 `json:"usage"`
+	Date time.Date `json:"date"`
 }
 
 // 日用量查询
