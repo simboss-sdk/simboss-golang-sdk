@@ -30,7 +30,7 @@ func TestUser_DashboardGet(t *testing.T) {
 	}
 }
 
-func TestUser_DashboardGet_Response_Error(t *testing.T) {
+func TestUser_DashboardGet_Exception(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
 {
@@ -64,4 +64,13 @@ func TestUser_DashboardGet_Response_Error(t *testing.T) {
 	if dashboard != nil {
 		t.Error("dashboard should be nil")
 	}
+}
+
+func TestUser_DashboardGet_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	dashboard, err := client.User.DashboardGet()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", dashboard)
 }

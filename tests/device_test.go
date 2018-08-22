@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"github.com/simboss-sdk/simboss-golang-sdk/v2"
 	"net/url"
+	"strings"
 )
 
 func TestDevice_DetailBatch(t *testing.T) {
@@ -110,6 +111,17 @@ func TestDevice_DetailBatch(t *testing.T) {
 	}
 }
 
+func TestDevice_DetailBatch_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccids", strings.Join(iccids, ","))
+	details, err := client.Device.DetailBatch(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", details)
+}
+
 func TestDevice_Detail(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -181,6 +193,17 @@ func TestDevice_Detail(t *testing.T) {
 	}
 }
 
+func TestDevice_Detail_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", poolIccid)
+	detail, err := client.Device.Detail(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", detail)
+}
+
 func TestDevice_OrderPlans(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -238,6 +261,17 @@ func TestDevice_OrderPlans(t *testing.T) {
 	}
 }
 
+func TestDevice_OrderPlans_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	plans, err := client.Device.OrderedPlans(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", plans)
+}
+
 func TestDevice_Rateplans(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -287,6 +321,17 @@ func TestDevice_Rateplans(t *testing.T) {
 	if rateplansList[0].RatePlanId != 0 {
 		t.Fatal("orderedPlanList[0].RatePlanId should be 0")
 	}
+}
+
+func TestDevice_Rateplans_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	plans, err := client.Device.Rateplans(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", plans)
 }
 
 func TestDevice_Recharge(t *testing.T) {
@@ -385,6 +430,17 @@ func TestDevice_RechargeRecords(t *testing.T) {
 	}
 }
 
+func TestDevice_RechargeRecords_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	result, err := client.Device.RechargeRecords(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
+}
+
 func TestDevice_GprsStatus(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -427,6 +483,17 @@ func TestDevice_GprsStatus(t *testing.T) {
 	}
 }
 
+func TestDevice_GprsStatus_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	result, err := client.Device.GprsStatus(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
+}
+
 func TestDevice_UserStatus(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -465,7 +532,17 @@ func TestDevice_UserStatus(t *testing.T) {
 	if status.Iccid != "898606111111132823" {
 		t.Error("Iccid should be 898606111111132823")
 	}
+}
 
+func TestDevice_UserStatus_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	result, err := client.Device.UserStatus(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
 }
 
 func TestDevice_RunningStatus(t *testing.T) {
@@ -507,7 +584,17 @@ func TestDevice_RunningStatus(t *testing.T) {
 	if status.Iccid != "898606111111132823" {
 		t.Error("Iccid should be 898606111111132823")
 	}
+}
 
+func TestDevice_RunningStatus_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", poolIccid)
+	result, err := client.Device.RunningStatus(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
 }
 
 func TestDevice_RatePlanSummary(t *testing.T) {
@@ -552,6 +639,17 @@ func TestDevice_RatePlanSummary(t *testing.T) {
 	if summary.ExpirationDate.String() != "2017-08-31 23:59:59" {
 		t.Error("ExpirationDate should be 2017-08-31 23:59:59")
 	}
+}
+
+func TestDevice_RatePlanSummary_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	result, err := client.Device.RatePlanSummary(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
 }
 
 func TestDevice_ModifyDeviceStatus(t *testing.T) {
@@ -643,6 +741,18 @@ func TestDevice_DailyUsage(t *testing.T) {
 	}
 }
 
+func TestDevice_DailyUsage_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	params.Set("date", "2017-08-01")
+	result, err := client.Device.DailyUsage(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
+}
+
 func TestDevice_DailyUsageByDateRange(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -700,6 +810,19 @@ func TestDevice_DailyUsageByDateRange(t *testing.T) {
 	if dailyUsageList[0].Date.String() != "2017-11-08" {
 		t.Error("dailyUsageList[0].Date should be 2017-11-08")
 	}
+}
+
+func TestDevice_DailyUsageByDateRange_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	params.Set("startDate", "2018-07-01")
+	params.Set("endDate", "2018-08-01")
+	result, err := client.Device.DailyUsageByDateRange(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", result)
 }
 
 func TestDevice_CancelTesting(t *testing.T) {
@@ -775,6 +898,17 @@ func TestDevice_MemoUpdate(t *testing.T) {
 	}
 }
 
+func TestDevice_MemoUpdate_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", singerIccid)
+	params.Set("memo", "ych sdk:MemoUpdate test")
+	err := client.Device.MemoUpdate(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestDevice_MemoBatchUpdate(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
@@ -810,6 +944,17 @@ func TestDevice_MemoBatchUpdate(t *testing.T) {
 
 	params.Set("memo", "hello world")
 	err = client.Device.MemoBatchUpdate(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestDevice_MemoBatchUpdate_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccids", strings.Join(iccids, ","))
+	params.Set("memo", "ych sdk:MemoBatchUpdate test")
+	err := client.Device.MemoBatchUpdate(params)
 	if err != nil {
 		t.Fatal(err)
 	}

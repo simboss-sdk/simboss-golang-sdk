@@ -98,3 +98,15 @@ func TestSms_List(t *testing.T) {
 		t.Error("list.List[0].SendTime should be 2017-11-23 12:34:56")
 	}
 }
+
+func TestSms_List_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("pageNo", "1")
+	params.Set("iccid", poolIccid)
+	smsList, err := client.Sms.List(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", smsList)
+}

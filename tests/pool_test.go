@@ -66,6 +66,26 @@ func TestPool_Detail(t *testing.T) {
 	}
 }
 
+func TestPool_List_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	pools, err := client.Pool.List()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", pools)
+}
+
+func TestPool_Detail_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccid", poolIccid)
+	pool, err := client.Pool.Detail(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v\n", pool)
+}
+
 func TestPool_List(t *testing.T) {
 	httpDo := func(_ *http.Client, req *http.Request) (*http.Response, error) {
 		msg := `
