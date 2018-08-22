@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	client := simboss.NewClient(("api-key", "api-secret")
+	client := simboss.NewClient(("appId", "appSecret")
 	info, err := client.User.DashboardGet()
 	if err != nil {
 		fmt.Println(err)
