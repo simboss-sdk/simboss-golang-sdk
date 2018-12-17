@@ -5,10 +5,10 @@ Golang Version >= 1.9
 
 #### 安装
 ##### 使用go自带工具安装
-go get -u github.com/simboss-sdk/simboss-golang-sdk
+go get -u github.com/simboss-sdk/simboss-golang-sdk/v2
 
 ##### 使用glide第三方包管理工具安装
-glide get github.com/simboss-sdk/simboss-golang-sdk
+glide get github.com/simboss-sdk/simboss-golang-sdk/v2
 
 [Package Management for Golang: glide](https://github.com/Masterminds/glide)
 
