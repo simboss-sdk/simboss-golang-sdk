@@ -43,6 +43,7 @@ type Client struct {
 	Pool      PoolService
 	Sms       SmsService
 	Realname  RealnameService
+	Wx	WxService
 }
 
 func NewClient(appId, appSecret string) *Client {
@@ -63,6 +64,7 @@ func NewClientWithHttpDo(appId, appSecret string, httpDo func(*http.Client, *htt
 	c.Pool = PoolService{c}
 	c.Sms = SmsService{c}
 	c.Realname = RealnameService{c}
+	c.Wx = WxService{c}
 	return c
 }
 
