@@ -49,11 +49,15 @@ func main() {
 |2.11 流量池卡开关网络     			|  url.Values{iccid,imsi,msisdn,status}                                                                 |  (error)                      |
 |2.12 日用量查询                  	|  url.Values{iccid,imsi,msisdn,date}                                                                   |  (*DailyUsage, error)         |
 |2.13 日用量按照时间范围查询           |  url.Values{iccid,imsi,msisdn,startDate,endDate}                                                      |  ([]DailyUsage, error)        |
-|2.14 取消测试期               		|  url.Values{iccid,imsi,msisdn}                                                                        |  (error)                      |
-|2.15 更新备注                    	|  url.Values{iccid,imsi,msisdn,memo}                                                                   |  (error)                      |
-|2.16 批量更新备注            		|  url.Values{iccids,imsis,msisdns,memo}                                                                |  (error)                      |
+|2.14 批量查询日用量查询               |  url.Values{iccids,imsis,msisdns,date}                                                                 | (*DailyUsageBatch, error)    |
+|2.15 取消测试期               		|  url.Values{iccid,imsi,msisdn}                                                                        |  (error)                      |
+|2.16 更新备注                    	|  url.Values{iccid,imsi,msisdn,memo}                                                                   |  (error)                      |
+|2.17 批量更新备注            		|  url.Values{iccids,imsis,msisdns,memo}                                                                |  (error)                      |
+|2.18 iccid列表查询                  |  url.Values{pageNo}                                                                                    |  (*IccidList, error)          |   
+|2.19 强制临时激活                    |  url.Values{iccid,imsi,msisdn}                                                                         | (error)                       |
 |3.1 流量池详情			           	|  url.Values{iccid,imsi,msisdn}                                                                        |  (*Pool, error)               |
 |3.2 用户下所有流量池信息             	|  无                                                                                                   |  ([]Pool, error)              |
-|4.1 提交实名认证信息		   			|  url.Values{iccid,imsi,msisdn,name,licenseType,licenseCode,<br>phone,extenalUserName,pic1,pic2,pic3}      |  (error)                      |
+|4.1 提交实名认证信息		   			|  url.Values{iccid,imsi,msisdn,name,licenseType,licenseCode,<br>phone,extenalUserName,pic1,pic2,pic3}  |  (error)                      |
 |5.1 短信下发接口			            |  url.Values{iccid,imsi,msisdn,text,msgId}                                                             |  (error)                      |
 |5.2 短信查询                        |  url.Values{iccid,imsi,msisdn,pageNo}                                                                 |  (*SmsList, error)            |
+|6.1 微信预支付-单卡续费              |  url.Values{iccid,imsi,msisdn,ratePlanId,month,outTradeNo}                                           | (error)                       |

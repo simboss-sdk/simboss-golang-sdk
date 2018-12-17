@@ -5,7 +5,7 @@ import (
 	"github.com/simboss-sdk/simboss-golang-sdk/utils/time"
 	"encoding/json"
 	"github.com/simboss-sdk/simboss-golang-sdk/utils"
-)
+	)
 
 type DeviceService struct {
 	client *Client
@@ -324,6 +324,40 @@ func (d *DeviceService) DailyUsageByDateRange(params url.Values) ([]DailyUsage, 
 	return dailyUsageList, nil
 }
 
+type DailyUsageWithCardId struct {
+	Usage float64 `json:"usage"`
+	Iccid string `json:"iccid"`
+	Imsi string `json:"imsi"`
+	Msisdn string `json:"msisdn"`
+}
+
+type DailyUsageBatch struct {
+	Date string `json:"date"`
+	DailyUsageList []DailyUsageWithCardId `json:"dailyUsageList"`
+}
+
+// 批量查询日用量查询
+func (d *DeviceService) DailyUsageBatch(params url.Values) (*DailyUsageBatch, error) {
+	if err := RequiredBatchCardId(params); err != nil {
+		return nil, err
+	}
+	if !utils.Required(params, "date") {
+		return nil, ErrRequired
+	}
+	dailyUsageList := &DailyUsageBatch{
+		Date: "",
+		DailyUsageList: make([]DailyUsageWithCardId, 0),
+	}
+	body, err := d.client.Post("/device/dailyUsage/batch", params)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(body, &dailyUsageList); err != nil {
+		return nil, err
+	}
+	return dailyUsageList, nil
+}
+
 // 取消测试期
 func (d *DeviceService) CancelTesting(params url.Values) (error) {
 	if err := RequiredCardId(params); err != nil {
@@ -366,3 +400,38 @@ func (d *DeviceService) MemoBatchUpdate(params url.Values) (error) {
 	return nil
 }
 
+type IccidList struct {
+	Page Page `json:"page"`
+	List []string `json:"list"`
+}
+
+// iccid列表查询
+func (d *DeviceService) IccidList(params url.Values) (*IccidList, error) {
+	if !utils.Required(params,"pageNo") {
+		return nil, ErrRequired
+	}
+	iccidList := &IccidList{
+		Page: Page{},
+		List: make([]string, 0),
+	}
+	body, err := d.client.Post("/device/iccid/list", params)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(body, iccidList); err != nil {
+		return nil, err
+	}
+	return iccidList, nil
+}
+
+// 强制临时激活
+func (d *DeviceService) Activate(params url.Values) error {
+	if err := RequiredCardId(params); err != nil {
+		return err
+	}
+	_, err := d.client.Post("/device/activate", params)
+	if err != nil {
+		return err
+	}
+	return nil
+}

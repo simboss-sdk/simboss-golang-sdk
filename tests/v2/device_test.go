@@ -959,3 +959,26 @@ func TestDevice_MemoBatchUpdate_Response(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestDevice_IccidList_Response(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("pageNo", "1")
+	iccidList, err := client.Device.IccidList(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(iccidList.Page, iccidList.List)
+}
+
+func TestDevice_DailyUsageBatch(t *testing.T) {
+	client := simboss.NewClient(appId, appSecret)
+	params := url.Values{}
+	params.Set("iccids", strings.Join(iccids, ","))
+	params.Set("date", "2018-11-12")
+	result, err := client.Device.DailyUsageBatch(params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result.Date, result.DailyUsageList)
+}
