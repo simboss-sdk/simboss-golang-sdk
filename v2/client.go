@@ -1,7 +1,7 @@
 package simboss
 
 import (
-			"net/http"
+	"net/http"
 	"fmt"
 	"io/ioutil"
 	"sort"
@@ -14,7 +14,7 @@ import (
 	"errors"
 )
 
-const API_ROOT string = "http://120.27.202.56:7001/2.0"
+const API_ROOT string = "https://api.simboss.com/2.0"
 
 var ErrRequired = errors.New("缺少必填参数")
 var ErrRequiredCardId = errors.New("iccid, imsi, msisdn 三者选一")

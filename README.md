@@ -1,8 +1,16 @@
 ## simboss-golang-sdk
 
+#### 环境
+Golang Version >= 1.9
 
-#### Installation
-go get github.com/simboss-sdk/simboss-golang-sdk
+#### 安装
+##### 使用go自带工具安装
+go get -u github.com/simboss-sdk/simboss-golang-sdk
+
+##### 使用glide第三方包管理工具安装
+glide get github.com/simboss-sdk/simboss-golang-sdk
+
+[Package Management for Golang: glide](https://github.com/Masterminds/glide)
 
 #### Usage
 ```go
@@ -46,6 +54,6 @@ func main() {
 |2.16 批量更新备注            		|  url.Values{iccids,imsis,msisdns,memo}                                                                |  (error)                      |
 |3.1 流量池详情			           	|  url.Values{iccid,imsi,msisdn}                                                                        |  (*Pool, error)               |
 |3.2 用户下所有流量池信息             	|  无                                                                                                   |  ([]Pool, error)              |
-|4.1 提交实名认证信息		   			|  url.Values{iccid,imsi,msisdn,name,licenseType,licenseCode,phone,extenalUserName,pic1,pic2,pic3}      |  (error)                      |
+|4.1 提交实名认证信息		   			|  url.Values{iccid,imsi,msisdn,name,licenseType,licenseCode,<br>phone,extenalUserName,pic1,pic2,pic3}      |  (error)                      |
 |5.1 短信下发接口			            |  url.Values{iccid,imsi,msisdn,text,msgId}                                                             |  (error)                      |
 |5.2 短信查询                        |  url.Values{iccid,imsi,msisdn,pageNo}                                                                 |  (*SmsList, error)            |
